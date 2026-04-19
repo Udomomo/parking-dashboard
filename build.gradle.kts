@@ -23,6 +23,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("tools.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.exposed:exposed-spring-boot-starter:1.2.0")
+    implementation("org.jetbrains.exposed:exposed-kotlin-datetime:1.2.0")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

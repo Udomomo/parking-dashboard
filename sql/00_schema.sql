@@ -40,9 +40,16 @@ CREATE TABLE contract_cancell_events (
     event_date DATE NOT NULL
 );
 
+CREATE TABLE parks (
+    id UUID PRIMARY KEY,
+    name VARCHAR(64) NOT NULL,
+    address VARCHAR(128) NOT NULL
+);
+
 CREATE TABLE districts (
     id UUID PRIMARY KEY,
-    name VARCHAR(64),
+    park_id UUID NOT NULL references parks(id),
+    name VARCHAR(64) NOT NULL,
     number INTEGER NOT NULL
 );
 
