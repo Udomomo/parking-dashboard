@@ -55,10 +55,20 @@ CREATE TABLE districts (
 
 CREATE TABLE cars (
     id UUID PRIMARY KEY,
-    contract_id UUID NOT NULL REFERENCES contracts(id),
-    number INTEGER NOT NULL,
-    type_number INTEGER NOT NULL
+    location VARCHAR(8) NOT NULL,
+    classification VARCHAR(3) NOT NULL,
+    hiragana VARCHAR(1) NOT NULL,
+    number VARCHAR(4) NOT NULL
 );
+CREATE INDEX classification_number_idx ON cars(number, classification);
+
+CREATE TABLE car_verification_events (
+    id UUID PRIMARY KEY,
+    car_id UUID REFERENCES cars(id),
+    status VARCHAR(16) NOT NULL,
+    event_at TIMESTAMP DEFAULT NOW() NOT NULL
+);
+CREATE INDEX car_id_inx ON car_verification_events(car_id);
 
 CREATE TABLE contract_car_events (
     id UUID PRIMARY KEY,

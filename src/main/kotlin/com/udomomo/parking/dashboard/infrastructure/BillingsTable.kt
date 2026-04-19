@@ -1,9 +1,10 @@
 package com.udomomo.parking.dashboard.infrastructure
 
+import org.jetbrains.exposed.v1.core.dao.id.UuidTable
 import org.jetbrains.exposed.v1.datetime.date
 
 @OptIn(kotlin.uuid.ExperimentalUuidApi::class)
-object BillingsTable : org.jetbrains.exposed.v1.core.dao.id.UuidTable("billings") {
+object BillingsTable : UuidTable("billings") {
     val contractId = reference("contract_id", ContractsTable)
     val price = integer("price")
     val periodStartAt = date("period_start_at")
