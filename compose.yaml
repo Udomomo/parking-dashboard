@@ -1,1 +1,19 @@
-services: {}
+version: '3.8'
+services:
+  db:
+    image: postgres:18
+    container_name: postgres_local
+    restart: always
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: parking-dashboard
+    volumes:
+      # - postgres_data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
+
+#volumes:
+#  postgres_data:
+
