@@ -35,6 +35,11 @@ kotlin {
 	compilerOptions {
 		freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
 	}
+
+    // Kotlin Uuidを全コードで有効にする
+    sourceSets.all {
+        languageSettings.optIn("kotlin.uuid.ExperimentalUuidApi")
+    }
 }
 
 tasks.withType<Test> {

@@ -1,10 +1,8 @@
 package com.udomomo.parking.dashboard.domain
 
-import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @ConsistentCopyVisibility
-@OptIn(ExperimentalUuidApi::class)
 data class Car private constructor(
     val id: Uuid,
     val customerId: Uuid,
