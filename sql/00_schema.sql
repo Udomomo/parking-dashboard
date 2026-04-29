@@ -33,7 +33,7 @@ CREATE TABLE contract_create_events (
     event_date DATE NOT NULL
 );
 
-CREATE TABLE contract_cancell_events (
+CREATE TABLE contract_cancel_events (
     id UUID PRIMARY KEY,
     contract_id UUID NOT NULL REFERENCES contracts(id),
     contract_end_at DATE NOT NULL,
