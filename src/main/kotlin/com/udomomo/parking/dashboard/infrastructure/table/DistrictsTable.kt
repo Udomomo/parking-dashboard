@@ -7,4 +7,3 @@ object DistrictsTable : UuidTable("districts") {
     val parkId = reference("park_id", ParksTable)
     val number = integer("number")
 }
-

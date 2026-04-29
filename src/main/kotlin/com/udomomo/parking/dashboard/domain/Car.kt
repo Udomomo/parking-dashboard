@@ -7,9 +7,12 @@ data class Car private constructor(
     val id: Uuid,
     val customerId: Uuid,
     val carNumber: CarNumber,
-): Entity {
+) : Entity {
     companion object {
-        fun of(id: Uuid, customerId: Uuid, carNumber: CarNumber) =
-            Car(id, customerId, carNumber)
+        fun of(
+            id: Uuid,
+            customerId: Uuid,
+            carNumber: CarNumber,
+        ) = Car(id, customerId, carNumber)
     }
 }

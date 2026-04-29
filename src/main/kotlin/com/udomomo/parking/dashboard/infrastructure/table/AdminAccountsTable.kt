@@ -7,4 +7,3 @@ object AdminAccountsTable : UuidTable("admin_accounts") {
     val password = varchar("password", 256)
     val status = varchar("status", 16)
 }
-

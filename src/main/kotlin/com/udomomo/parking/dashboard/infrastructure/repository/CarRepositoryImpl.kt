@@ -14,43 +14,43 @@ import kotlin.uuid.Uuid
 class CarRepositoryImpl : CarRepository {
     override fun listByNumber(
         classification: CarNumber.Classification,
-        number: CarNumber.Number
-    ): List<Car> {
-        return CarsTable
+        number: CarNumber.Number,
+    ): List<Car> =
+        CarsTable
             .select((CarsTable.classification eq classification.value) and (CarsTable.number eq number.value.toString()))
             .map {
                 Car.of(
                     id = it[CarsTable.id].value,
                     customerId = it[CarsTable.customerId].value,
-                    carNumber = CarNumber.of(
-                        location = CarNumber.Location(it[CarsTable.location]),
-                        classification = CarNumber.Classification(it[CarsTable.classification]),
-                        hiragana = CarNumber.Hiragana(it[CarsTable.hiragana]),
-                        number = CarNumber.Number(it[CarsTable.number].toInt()),
-                        carNumbers = emptyList(),
-                    )
+                    carNumber =
+                        CarNumber.of(
+                            location = CarNumber.Location(it[CarsTable.location]),
+                            classification = CarNumber.Classification(it[CarsTable.classification]),
+                            hiragana = CarNumber.Hiragana(it[CarsTable.hiragana]),
+                            number = CarNumber.Number(it[CarsTable.number].toInt()),
+                            carNumbers = emptyList(),
+                        ),
                 )
             }
-    }
 
-    override fun findBy(uuid: Uuid): Car? {
-        return CarsTable
+    override fun findBy(uuid: Uuid): Car? =
+        CarsTable
             .select(CarsTable.id eq uuid)
             .singleOrNull()
             ?.let {
                 Car.of(
                     id = it[CarsTable.id].value,
                     customerId = it[CarsTable.customerId].value,
-                    carNumber = CarNumber.of(
-                        location = CarNumber.Location(it[CarsTable.location]),
-                        classification = CarNumber.Classification(it[CarsTable.classification]),
-                        hiragana = CarNumber.Hiragana(it[CarsTable.hiragana]),
-                        number = CarNumber.Number(it[CarsTable.number].toInt()),
-                        carNumbers = emptyList(),
-                    )
+                    carNumber =
+                        CarNumber.of(
+                            location = CarNumber.Location(it[CarsTable.location]),
+                            classification = CarNumber.Classification(it[CarsTable.classification]),
+                            hiragana = CarNumber.Hiragana(it[CarsTable.hiragana]),
+                            number = CarNumber.Number(it[CarsTable.number].toInt()),
+                            carNumbers = emptyList(),
+                        ),
                 )
             }
-    }
 
     override fun save(car: Car) {
         val found = findBy(car.id)
@@ -61,7 +61,9 @@ class CarRepositoryImpl : CarRepository {
                 it[location] = car.carNumber.location.value
                 it[classification] = car.carNumber.classification.value
                 it[hiragana] = car.carNumber.hiragana.value
-                it[number] = car.carNumber.number.value.toString()
+                it[number] =
+                    car.carNumber.number.value
+                        .toString()
             }
             return
         }
@@ -72,7 +74,9 @@ class CarRepositoryImpl : CarRepository {
             it[location] = car.carNumber.location.value
             it[classification] = car.carNumber.classification.value
             it[hiragana] = car.carNumber.hiragana.value
-            it[number] = car.carNumber.number.value.toString()
+            it[number] =
+                car.carNumber.number.value
+                    .toString()
         }
     }
 }

@@ -8,7 +8,7 @@ data class CarNumber private constructor(
     val classification: Classification,
     val hiragana: Hiragana,
     val number: Number,
-): ValueObject {
+) : ValueObject {
     // ナンバープレートの地名
     @JvmInline
     value class Location(
@@ -63,7 +63,7 @@ data class CarNumber private constructor(
             classification: Classification,
             hiragana: Hiragana,
             number: Number,
-            carNumbers: List<CarNumber>
+            carNumbers: List<CarNumber>,
         ): CarNumber {
             val carNumber = CarNumber(location, classification, hiragana, number)
 
@@ -76,7 +76,5 @@ data class CarNumber private constructor(
         }
     }
 
-
     override fun toString() = "${location.value} ${classification.value} ${hiragana.value} ${number.value}"
 }
-

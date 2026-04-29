@@ -17,9 +17,10 @@ class CarNumberTest {
         val number = CarNumber.Number(1234)
 
         // Act
-        val result = runCatching {
-            CarNumber.of(location, classification, hiragana, number, carNumbers = emptyList())
-        }.getOrNull()
+        val result =
+            runCatching {
+                CarNumber.of(location, classification, hiragana, number, carNumbers = emptyList())
+            }.getOrNull()
 
         Assertions.assertThat(result).isNotNull()
     }
@@ -35,9 +36,10 @@ class CarNumberTest {
         val existingCarNumber = CarNumber.of(location, classification, hiragana, number, carNumbers = emptyList())
 
         // Act & Assert
-        Assertions.assertThatThrownBy {
-            CarNumber.of(location, classification, hiragana, number, carNumbers = listOf(existingCarNumber))
-        }.isExactlyInstanceOf(ParkingInvalidArgumentException::class.java)
+        Assertions
+            .assertThatThrownBy {
+                CarNumber.of(location, classification, hiragana, number, carNumbers = listOf(existingCarNumber))
+            }.isExactlyInstanceOf(ParkingInvalidArgumentException::class.java)
     }
 
     @Nested
@@ -48,25 +50,28 @@ class CarNumberTest {
             val location = "愛知"
 
             // Act
-            val result = runCatching {
-                CarNumber.Location(location)
-            }.getOrNull()
+            val result =
+                runCatching {
+                    CarNumber.Location(location)
+                }.getOrNull()
 
             // Assert
             Assertions.assertThat(result).isNotNull()
-
         }
 
         @ParameterizedTest
-        @ValueSource(strings = [
-            "",
-            " ",
-            "　 ",
-        ])
+        @ValueSource(
+            strings = [
+                "",
+                " ",
+                "　 ",
+            ],
+        )
         fun `should not create a blank location`(input: String) {
-            Assertions.assertThatThrownBy {
-                CarNumber.Location(input)
-            }.isExactlyInstanceOf(ParkingInvalidArgumentException::class.java)
+            Assertions
+                .assertThatThrownBy {
+                    CarNumber.Location(input)
+                }.isExactlyInstanceOf(ParkingInvalidArgumentException::class.java)
         }
     }
 
@@ -76,13 +81,14 @@ class CarNumberTest {
         @ValueSource(
             strings = [
                 "123",
-                "24Z"
-            ]
+                "24Z",
+            ],
         )
         fun `should create a valid classification`(input: String) {
-            val result = runCatching {
-                CarNumber.Classification(input)
-            }.getOrNull()
+            val result =
+                runCatching {
+                    CarNumber.Classification(input)
+                }.getOrNull()
             Assertions.assertThat(result).isNotNull()
         }
 
@@ -92,12 +98,13 @@ class CarNumberTest {
                 "分類", // 英数でない
                 "1234", // 3桁でない
                 "ABC", // 最初の1桁が数字でない
-            ]
+            ],
         )
         fun `should not create an invalid classification`(input: String) {
-            Assertions.assertThatThrownBy {
-                CarNumber.Classification(input)
-            }.isExactlyInstanceOf(ParkingInvalidArgumentException::class.java)
+            Assertions
+                .assertThatThrownBy {
+                    CarNumber.Classification(input)
+                }.isExactlyInstanceOf(ParkingInvalidArgumentException::class.java)
         }
     }
 
@@ -109,56 +116,66 @@ class CarNumberTest {
             val hiragana = "あ"
 
             // Act
-            val result = runCatching {
-                CarNumber.Hiragana(hiragana)
-            }.getOrNull()
+            val result =
+                runCatching {
+                    CarNumber.Hiragana(hiragana)
+                }.getOrNull()
 
             // Assert
             Assertions.assertThat(result).isNotNull()
         }
 
         @ParameterizedTest
-        @ValueSource(strings = [
-            "あいう",
-            "1",
-            "安",
-            ""
-        ])
+        @ValueSource(
+            strings = [
+                "あいう",
+                "1",
+                "安",
+                "",
+            ],
+        )
         fun `should not create an invalid hiragana`(input: String) {
-            Assertions.assertThatThrownBy {
-                CarNumber.Hiragana(input)
-            }.isExactlyInstanceOf(ParkingInvalidArgumentException::class.java)
+            Assertions
+                .assertThatThrownBy {
+                    CarNumber.Hiragana(input)
+                }.isExactlyInstanceOf(ParkingInvalidArgumentException::class.java)
         }
     }
 
     @Nested
     inner class Number {
         @ParameterizedTest
-        @ValueSource(ints = [
-            1,
-            500,
-            9999,
-        ])
+        @ValueSource(
+            ints = [
+                1,
+                500,
+                9999,
+            ],
+        )
         fun `should create a valid number`(input: Int) {
             // Act
-            val result = runCatching {
-                CarNumber.Number(input)
-            }.getOrNull()
+            val result =
+                runCatching {
+                    CarNumber.Number(input)
+                }.getOrNull()
 
             // Assert
             Assertions.assertThat(result).isNotNull()
         }
 
         @ParameterizedTest
-        @ValueSource(ints = [
-            -1,
-            0,
-            10000,
-        ])
+        @ValueSource(
+            ints = [
+                -1,
+                0,
+                10000,
+            ],
+        )
         fun `should not create an invalid number`(input: Int) {
-            Assertions.assertThatThrownBy {
-                CarNumber.Number(input)
-            }.isExactlyInstanceOf(ParkingInvalidArgumentException::class.java)
+            Assertions
+                .assertThatThrownBy {
+                    CarNumber.Number(input)
+                }.isExactlyInstanceOf(ParkingInvalidArgumentException::class.java)
         }
     }
 }
