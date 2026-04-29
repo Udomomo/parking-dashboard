@@ -1,8 +1,9 @@
-package com.udomomo.parking.dashboard.infrastructure
+package com.udomomo.parking.dashboard.infrastructure.table
 
 import org.jetbrains.exposed.v1.core.Table
+import kotlin.uuid.ExperimentalUuidApi
 
-@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+@OptIn(ExperimentalUuidApi::class)
 object ContractAssigneeMappingsTable : Table("contract_assignee_mappings") {
     val contractId = reference("contract_id", ContractsTable)
     val adminAccountId = reference("admin_account_id", AdminAccountsTable)

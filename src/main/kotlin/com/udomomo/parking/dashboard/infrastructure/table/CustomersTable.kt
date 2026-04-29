@@ -1,4 +1,4 @@
-package com.udomomo.parking.dashboard.infrastructure
+package com.udomomo.parking.dashboard.infrastructure.table
 
 import org.jetbrains.exposed.v1.core.dao.id.UuidTable
 

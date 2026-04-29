@@ -1,9 +1,10 @@
-package com.udomomo.parking.dashboard.infrastructure
+package com.udomomo.parking.dashboard.infrastructure.table
 
 import org.jetbrains.exposed.v1.core.dao.id.UuidTable
 import org.jetbrains.exposed.v1.datetime.date
+import kotlin.uuid.ExperimentalUuidApi
 
-@OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+@OptIn(ExperimentalUuidApi::class)
 object ContractCancellEventsTable : UuidTable("contract_cancell_events") {
     val contractId = reference("contract_id", ContractsTable)
     val contractEndAt = date("contract_end_at")
