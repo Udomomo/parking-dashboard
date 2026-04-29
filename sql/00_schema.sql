@@ -55,6 +55,7 @@ CREATE TABLE districts (
 
 CREATE TABLE cars (
     id UUID PRIMARY KEY,
+    customer_id UUID NOT NULL REFERENCES customers(id),
     location VARCHAR(8) NOT NULL,
     classification VARCHAR(3) NOT NULL,
     hiragana VARCHAR(1) NOT NULL,

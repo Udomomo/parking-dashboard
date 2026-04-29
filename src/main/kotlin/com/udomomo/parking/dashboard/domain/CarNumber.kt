@@ -8,7 +8,7 @@ data class CarNumber private constructor(
     val classification: Classification,
     val hiragana: Hiragana,
     val number: Number,
-) {
+): ValueObject {
     // ナンバープレートの地名
     @JvmInline
     value class Location(
@@ -54,7 +54,7 @@ data class CarNumber private constructor(
             carNumbers: List<CarNumber>
         ): CarNumber {
             val carNumber = CarNumber(location, classification, hiragana, number)
-            val specification = CarNumberSpecification(carNumbers)
+            val specification = CarSpecification(carNumbers)
             if (!specification.isSatisfied(carNumber)) {
                 throw ParkingInvalidArgumentException()
             }

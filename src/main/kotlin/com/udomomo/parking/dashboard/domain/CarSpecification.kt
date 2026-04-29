@@ -1,6 +1,6 @@
 package com.udomomo.parking.dashboard.domain
 
-class CarNumberSpecification(
+class CarSpecification(
     val carNumbers: List<CarNumber>
 ): Specification<CarNumber> {
     override fun isSatisfied(obj: CarNumber): Boolean =
