@@ -1,0 +1,11 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ktlint
+        name: ktlint
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+        entry: >-
+          bash -c "git diff --name-only -z --cached --relative -- '*.kt' '*.kts' | ktlint --format --relative --patterns-from-stdin=''"
