@@ -13,7 +13,13 @@ data class CarNumber private constructor(
     @JvmInline
     value class Location(
         val value: String,
-    )
+    ) {
+        init {
+            if (value.isBlank()) {
+                throw ParkingInvalidArgumentException("Location cannot be blank")
+            }
+        }
+    }
 
     // 3桁の分類番号。下2桁はアルファベットもありうる。
     @JvmInline
@@ -21,7 +27,9 @@ data class CarNumber private constructor(
         val value: String,
     ) {
         init {
-            require(value.matches(Regex("^[0-9][0-9A-Z]{2}$")))
+            if (!value.matches(Regex("^[0-9][0-9A-Z]{2}$"))) {
+                throw ParkingInvalidArgumentException("invalid classification | $value")
+            }
         }
     }
 
@@ -31,7 +39,9 @@ data class CarNumber private constructor(
         val value: String,
     ) {
         init {
-            require(value.matches(Regex("^[あいうえかきくけこさすせそたちつてとなにぬねのはひふほまみむめもやゆよらりるれろわを]$")))
+            if (!value.matches(Regex("^[あいうえかきくけこさすせそたちつてとなにぬねのはひふほまみむめもやゆよらりるれろわを]$"))) {
+                throw ParkingInvalidArgumentException("invalid Hiragana | $value")
+            }
         }
     }
 
@@ -41,7 +51,9 @@ data class CarNumber private constructor(
         val value: Int,
     ) {
         init {
-            require(value in 1..9999)
+            if (value !in 1..9999) {
+                throw ParkingInvalidArgumentException("invalid number | $value")
+            }
         }
     }
 
@@ -54,9 +66,10 @@ data class CarNumber private constructor(
             carNumbers: List<CarNumber>
         ): CarNumber {
             val carNumber = CarNumber(location, classification, hiragana, number)
+
             val specification = CarSpecification(carNumbers)
             if (!specification.isSatisfied(carNumber)) {
-                throw ParkingInvalidArgumentException()
+                throw ParkingInvalidArgumentException("Car number specification is not satisfied")
             }
 
             return carNumber
