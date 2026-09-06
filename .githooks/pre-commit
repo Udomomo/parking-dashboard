@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+readonly KTLINT_VERSION="1.8.0"
+readonly REPOSITORY_ROOT="$(git rev-parse --show-toplevel)"
+readonly KTLINT_CACHE_ROOT="${REPOSITORY_ROOT}/.cache/ktlint/${KTLINT_VERSION}"
+
+cd "${REPOSITORY_ROOT}"
+
+staged_kotlin_files=()
+while IFS= read -r -d '' file; do
+  case "${file}" in
+    *.kt|*.kts)
+      staged_kotlin_files+=("${file}")
+      ;;
+  esac
+done < <(git diff --cached --name-only --diff-filter=ACMR -z)
+
+if [ "${#staged_kotlin_files[@]}" -eq 0 ]; then
+  exit 0
+fi
+
+case "$(uname -s):$(uname -m)" in
+  Darwin:arm64|Darwin:aarch64)
+    ktlint_asset="ktlint_darwin-arm64"
+    ;;
+  Linux:x86_64|Linux:amd64)
+    ktlint_asset="ktlint_linux-x86-64"
+    ;;
+  MINGW*:x86_64|MSYS*:x86_64|CYGWIN*:x86_64)
+    ktlint_asset="ktlint_windows-x86-64.exe"
+    ;;
+  *)
+    # The executable JAR works on platforms without a native ktlint asset,
+    # provided that Java is available on PATH.
+    ktlint_asset="ktlint"
+    ;;
+esac
+
+ktlint_path="${KTLINT_CACHE_ROOT}/${ktlint_asset}"
+if [ ! -x "${ktlint_path}" ]; then
+  if ! command -v curl >/dev/null 2>&1; then
+    echo "pre-commit: curl is required to download ktlint ${KTLINT_VERSION}." >&2
+    exit 1
+  fi
+
+  mkdir -p "${KTLINT_CACHE_ROOT}"
+  temporary_path="${ktlint_path}.tmp.$$"
+  trap 'rm -f "${temporary_path}"' EXIT
+
+  echo "pre-commit: downloading ktlint ${KTLINT_VERSION}..."
+  curl --fail --location --silent --show-error --retry 3 \
+    "https://github.com/ktlint/ktlint/releases/download/${KTLINT_VERSION}/${ktlint_asset}" \
+    --output "${temporary_path}"
+  chmod +x "${temporary_path}"
+  mv "${temporary_path}" "${ktlint_path}"
+  trap - EXIT
+fi
+
+echo "pre-commit: formatting staged Kotlin files with ktlint ${KTLINT_VERSION}..."
+set +e
+"${ktlint_path}" --format "${staged_kotlin_files[@]}"
+ktlint_status=$?
+set -e
+
+# Formatting changes must be included in the commit. Unstaged changes in other
+# files are left untouched because only the staged Kotlin paths are added.
+git add -- "${staged_kotlin_files[@]}"
+
+if [ "${ktlint_status}" -ne 0 ]; then
+  echo "pre-commit: ktlint found violations that require manual fixes." >&2
+  exit "${ktlint_status}"
+fi
